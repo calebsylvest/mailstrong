@@ -3,7 +3,7 @@ Intercepts external links in Gmail to prevent accidental phishing clicks
 
 # Phase 1 Setup
 
-## 📁 Project Structure
+## 📁 Project Structuregit
 
 Create the following folder structure:
 
@@ -98,7 +98,7 @@ Create simple colored squares in any image editor:
    - Add "google.com" to whitelist
    - Save settings
    - Click a google.com link in Gmail
-   - [x] Link should open normally (not intercepted)
+   - ✅ Link should open normally (not intercepted)
 
 2. **Disable extension**:
    - Click extension icon to disable

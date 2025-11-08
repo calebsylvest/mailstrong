@@ -360,23 +360,23 @@ chrome.storage.local.clear(() => console.log('All data cleared'));
 Check ALL before moving to Chrome Web Store preparation:
 
 - [x] Copy URL button works on all link types
-- [ ] Statistics track accurately (all counters)
-- [ ] Top domains list displays correctly
-- [ ] History records all interceptions
-- [ ] History shows correct timestamps
-- [ ] History shows correct actions
-- [ ] Both toggles work (can disable features)
-- [ ] Reset Statistics works
-- [ ] Clear History works
-- [ ] Refresh buttons update data
-- [ ] Data persists across sessions
-- [ ] No console errors
-- [ ] Options page loads quickly
-- [ ] All 3 tabs work correctly
-- [ ] Visual design looks professional
-- [ ] No memory leaks after 100+ links
-- [ ] Gmail still responsive
-- [ ] All Phase 1 & 2 features still work
+- [x] Statistics track accurately (all counters)
+- [x] Top domains list displays correctly
+- [x] History records all interceptions
+- [x] History shows correct timestamps
+- [x] History shows correct actions
+- [x] Both toggles work (can disable features)
+- [x] Reset Statistics works
+- [x] Clear History works
+- [x] Refresh buttons update data
+- [x] Data persists across sessions
+- [x] No console errors
+- [x] Options page loads quickly
+- [x] All 3 tabs work correctly
+- [x] Visual design looks professional
+- [x] No memory leaks after 100+ links
+- [x] Gmail still responsive
+- [x] All Phase 1 & 2 features still work
 
 ---
 

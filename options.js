@@ -203,17 +203,31 @@
     `).join('');
   }
 
+  
   // Reset statistics
   function resetStatistics() {
-    if (!confirm('This will delete all statistics. Are you sure?')) {
+    // At the top of resetStatistics()
+    console.log('Reset Statistics button clicked');
+
+    if (!confirm('This will permanently delete all statistics. Are you sure?')) {
       return;
     }
 
     const defaults = getDefaultStats();
     chrome.storage.local.set({ stats: defaults }, () => {
-      console.log('Statistics reset');
-      loadStatistics();
-      showStatus('Statistics reset successfully', 'success');
+      if (chrome.runtime.lastError) {
+        console.error('Failed to reset statistics:', chrome.runtime.lastError);
+        showStatus('Failed to reset statistics', 'error');
+        return;
+      }
+      
+      console.log('Statistics reset successfully');
+      
+      // Force UI refresh
+      setTimeout(() => {
+        loadStatistics();
+        showStatus('Statistics reset successfully', 'success');
+      }, 100);
     });
   }
 
@@ -272,6 +286,9 @@
 
   // Clear history
   function clearHistory() {
+    // At the top of clearHistory()  
+    console.log('Clear History button clicked');
+    
     if (!confirm('This will delete all link history. Are you sure?')) {
       return;
     }

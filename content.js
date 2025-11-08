@@ -1,23 +1,32 @@
-// Gmail Link Interceptor - Phase 2: Core Modal Functionality
-// Full modal implementation with URL analysis and user actions
+// Gmail Link Interceptor - Phase 3: Advanced Features
+// Includes: Copy URL, Recent Links History, Statistics/Analytics
 
 (function() {
   'use strict';
 
-  console.log('Gmail Link Interceptor v2.0: Content script loaded');
+  console.log('Gmail Link Interceptor v3.0: Content script loaded');
 
   // Configuration
   let enabled = true;
   let whitelist = [];
+  let historyEnabled = true;
+  let statsEnabled = true;
   let modalOpen = false;
   let dismissTimer = null;
   let remainingSeconds = 5;
 
   // Load settings from storage
-  chrome.storage.sync.get(['enabled', 'whitelist'], (data) => {
+  chrome.storage.sync.get(['enabled', 'whitelist', 'historyEnabled', 'statsEnabled'], (data) => {
     enabled = data.enabled !== false;
     whitelist = data.whitelist || [];
-    console.log('Gmail Link Interceptor: Settings loaded', { enabled, whitelist });
+    historyEnabled = data.historyEnabled !== false;
+    statsEnabled = data.statsEnabled !== false;
+    console.log('Gmail Link Interceptor: Settings loaded', { 
+      enabled, 
+      whitelist, 
+      historyEnabled, 
+      statsEnabled 
+    });
     
     if (enabled) {
       initializeInterceptor();
@@ -182,6 +191,36 @@
         line-height: 1.5;
         max-height: 120px;
         overflow-y: auto;
+        position: relative;
+      }
+
+      .gli-url-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .gli-copy-btn {
+        padding: 6px 12px;
+        background: #e3f2fd;
+        color: #1976D2;
+        border: 1px solid #90caf9;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      .gli-copy-btn:hover {
+        background: #bbdefb;
+      }
+
+      .gli-copy-btn.copied {
+        background: #4CAF50;
+        color: white;
+        border-color: #4CAF50;
       }
 
       .gli-security-section {
@@ -520,6 +559,7 @@
   function createModalElement(analysis) {
     const modal = document.createElement('div');
     modal.id = 'gli-modal';
+    modal.dataset.url = analysis.full;
     
     const risks = [];
     if (!analysis.isSecure) {
@@ -562,6 +602,11 @@
           <div class="gli-url-section">
             <div class="gli-section-label">Full URL</div>
             <div class="gli-full-url">${analysis.displayURL}</div>
+            <div class="gli-url-actions">
+              <button class="gli-copy-btn" id="gli-copy-btn" title="Copy URL to clipboard">
+                📋 Copy URL
+              </button>
+            </div>
           </div>
           
           <div class="gli-security-section">
@@ -611,54 +656,88 @@
     trapFocus(modal);
     startAutoDismiss();
     
+    // Record interception in history and stats
+    recordInterception(url, analysis);
+    
     console.log('Gmail Link Interceptor: Modal displayed');
   }
 
- // Attach modal event listeners
-function attachModalListeners(modal, url, analysis) {
-  const confirmBtn = modal.querySelector('#gli-confirm-btn');
-  const cancelBtn = modal.querySelector('#gli-cancel-btn');
-  const whitelistBtn = modal.querySelector('#gli-whitelist-btn');
-  const backdrop = modal.querySelector('#gli-modal-backdrop');
+  // Attach modal event listeners
+  function attachModalListeners(modal, url, analysis) {
+    const confirmBtn = modal.querySelector('#gli-confirm-btn');
+    const cancelBtn = modal.querySelector('#gli-cancel-btn');
+    const whitelistBtn = modal.querySelector('#gli-whitelist-btn');
+    const copyBtn = modal.querySelector('#gli-copy-btn');
+    const backdrop = modal.querySelector('#gli-modal-backdrop');
 
-  confirmBtn.addEventListener('click', () => handleConfirm(url));
-  cancelBtn.addEventListener('click', handleCancel);
-  whitelistBtn.addEventListener('click', () => handleWhitelist(url, analysis.hostname));
-  backdrop.addEventListener('click', handleCancel);
+    confirmBtn.addEventListener('click', () => handleConfirm(url, analysis));
+    cancelBtn.addEventListener('click', () => handleCancel(url, analysis));
+    whitelistBtn.addEventListener('click', () => handleWhitelist(url, analysis.hostname));
+    copyBtn.addEventListener('click', () => handleCopyURL(url));
+    backdrop.addEventListener('click', () => handleCancel(url, analysis));
 
-  // FIXED: Delay pause activation by 500ms to avoid immediate triggering
-  setTimeout(() => {
-    modal.addEventListener('mouseenter', pauseAutoDismiss);
-    modal.addEventListener('click', pauseAutoDismiss);
-  }, 500);
+    // Delay pause activation to avoid immediate triggering
+    setTimeout(() => {
+      modal.addEventListener('mouseenter', pauseAutoDismiss);
+      modal.addEventListener('click', pauseAutoDismiss);
+    }, 500);
 
-  // Keyboard shortcuts
-  document.addEventListener('keydown', handleKeyPress);
-}
+    // Keyboard shortcuts
+    document.addEventListener('keydown', handleKeyPress);
+  }
 
   // Handle keyboard presses
   function handleKeyPress(e) {
     if (!modalOpen) return;
 
     if (e.key === 'Escape') {
-      handleCancel();
+      const modal = document.getElementById('gli-modal');
+      const url = modal.dataset.url;
+      const analysis = analyzeURL(url);
+      handleCancel(url, analysis);
     } else if (e.key === 'Enter') {
       const modal = document.getElementById('gli-modal');
       const url = modal.dataset.url;
-      if (url) handleConfirm(url);
+      const analysis = analyzeURL(url);
+      if (url) handleConfirm(url, analysis);
     }
   }
 
+  // Handle copy URL to clipboard
+  function handleCopyURL(url) {
+    navigator.clipboard.writeText(url).then(() => {
+      console.log('Gmail Link Interceptor: URL copied to clipboard');
+      
+      const copyBtn = document.getElementById('gli-copy-btn');
+      const originalText = copyBtn.innerHTML;
+      
+      copyBtn.innerHTML = '✓ Copied!';
+      copyBtn.classList.add('copied');
+      
+      setTimeout(() => {
+        copyBtn.innerHTML = originalText;
+        copyBtn.classList.remove('copied');
+      }, 2000);
+      
+      showToast('URL copied to clipboard');
+    }).catch(err => {
+      console.error('Gmail Link Interceptor: Failed to copy URL', err);
+      showToast('Failed to copy URL');
+    });
+  }
+
   // Handle confirm action
-  function handleConfirm(url) {
+  function handleConfirm(url, analysis) {
     console.log('Gmail Link Interceptor: User confirmed link', url);
+    recordAction(url, analysis, 'opened');
     window.open(url, '_blank', 'noopener,noreferrer');
     removeModal();
   }
 
   // Handle cancel action
-  function handleCancel() {
+  function handleCancel(url, analysis) {
     console.log('Gmail Link Interceptor: User cancelled');
+    recordAction(url, analysis, 'cancelled');
     removeModal();
   }
 
@@ -672,6 +751,10 @@ function attachModalListeners(modal, url, analysis) {
         chrome.storage.sync.set({ whitelist: currentWhitelist }, () => {
           console.log('Gmail Link Interceptor: Domain whitelisted', domain);
           whitelist = currentWhitelist;
+          
+          const analysis = analyzeURL(url);
+          recordAction(url, analysis, 'whitelisted');
+          
           showToast(`${domain} added to trusted domains`);
           window.open(url, '_blank', 'noopener,noreferrer');
           removeModal();
@@ -680,6 +763,113 @@ function attachModalListeners(modal, url, analysis) {
         showToast(`${domain} is already in trusted domains`);
       }
     });
+  }
+
+  // Record interception in history
+  function recordInterception(url, analysis) {
+    if (!historyEnabled) return;
+
+    chrome.storage.local.get(['linkHistory'], (data) => {
+      const history = data.linkHistory || [];
+      
+      const entry = {
+        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        url: url,
+        domain: analysis.hostname,
+        timestamp: Date.now(),
+        isSecure: analysis.isSecure,
+        action: 'pending'
+      };
+      
+      history.unshift(entry);
+      
+      // Keep only last 50 entries
+      if (history.length > 50) {
+        history.splice(50);
+      }
+      
+      chrome.storage.local.set({ linkHistory: history });
+      console.log('Gmail Link Interceptor: Recorded in history', entry);
+    });
+  }
+
+  // Record user action in history and statistics
+  function recordAction(url, analysis, action) {
+    const domain = analysis.hostname;
+    
+    // Update history
+    if (historyEnabled) {
+      chrome.storage.local.get(['linkHistory'], (data) => {
+        const history = data.linkHistory || [];
+        
+        // Find and update the most recent pending entry for this URL
+        const entry = history.find(h => h.url === url && h.action === 'pending');
+        if (entry) {
+          entry.action = action;
+          chrome.storage.local.set({ linkHistory: history });
+        }
+      });
+    }
+    
+    // Update statistics
+    if (statsEnabled) {
+      chrome.storage.local.get(['stats'], (data) => {
+        const stats = data.stats || getDefaultStats();
+        
+        stats.totalIntercepted++;
+        
+        if (action === 'opened') stats.totalOpened++;
+        if (action === 'cancelled') stats.totalCancelled++;
+        if (action === 'whitelisted') stats.totalWhitelisted++;
+        
+        // Update domain stats
+        if (!stats.domainStats[domain]) {
+          stats.domainStats[domain] = { 
+            count: 0, 
+            opened: 0, 
+            cancelled: 0, 
+            whitelisted: 0,
+            lastSeen: 0 
+          };
+        }
+        stats.domainStats[domain].count++;
+        if (action === 'opened') stats.domainStats[domain].opened++;
+        if (action === 'cancelled') stats.domainStats[domain].cancelled++;
+        if (action === 'whitelisted') stats.domainStats[domain].whitelisted++;
+        stats.domainStats[domain].lastSeen = Date.now();
+        
+        // Update security stats
+        if (analysis.isSecure) {
+          stats.httpsCount++;
+        } else {
+          stats.httpCount++;
+        }
+        
+        // Count suspicious links blocked
+        if (action === 'cancelled' && (!analysis.isSecure || analysis.isIP || analysis.hasSuspicious)) {
+          stats.suspiciousBlocked++;
+        }
+        
+        chrome.storage.local.set({ stats });
+        console.log('Gmail Link Interceptor: Stats updated', stats);
+      });
+    }
+  }
+
+  // Get default statistics object
+  function getDefaultStats() {
+    return {
+      totalIntercepted: 0,
+      totalOpened: 0,
+      totalCancelled: 0,
+      totalWhitelisted: 0,
+      httpCount: 0,
+      httpsCount: 0,
+      suspiciousBlocked: 0,
+      domainStats: {},
+      installDate: Date.now(),
+      lastReset: Date.now()
+    };
   }
 
   // Show toast notification
@@ -705,7 +895,10 @@ function attachModalListeners(modal, url, analysis) {
       
       if (remainingSeconds <= 0) {
         clearInterval(dismissTimer);
-        handleCancel();
+        const modal = document.getElementById('gli-modal');
+        const url = modal.dataset.url;
+        const analysis = analyzeURL(url);
+        handleCancel(url, analysis);
       }
     }, 1000);
   }
@@ -810,6 +1003,14 @@ function attachModalListeners(modal, url, analysis) {
       if (changes.whitelist) {
         whitelist = changes.whitelist.newValue || [];
         console.log('Gmail Link Interceptor: Whitelist updated', whitelist);
+      }
+      if (changes.historyEnabled) {
+        historyEnabled = changes.historyEnabled.newValue;
+        console.log('Gmail Link Interceptor: History enabled changed', historyEnabled);
+      }
+      if (changes.statsEnabled) {
+        statsEnabled = changes.statsEnabled.newValue;
+        console.log('Gmail Link Interceptor: Stats enabled changed', statsEnabled);
       }
     }
   });

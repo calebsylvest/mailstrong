@@ -99,3 +99,9 @@ Manual installation is required until the extension is published in the Chrome W
 Need help? Have suggestions? Contact us through the support link.
 
 Stay safe online! 🛡️
+
+---
+
+Watch the Video walkthrough:
+
+https://youtu.be/8DkL-eUV_Tg?list=PLGQf8yzLXm8EV7VCT7hKc71w-0GEuiooW

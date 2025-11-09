@@ -186,14 +186,17 @@
         background: #f5f5f5;
         padding: 12px;
         border-radius: 6px;
-        word-break: break-all;
+        /* allow wrapping of long URLs across lines for readability */
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
         font-family: 'Courier New', monospace;
         line-height: 1.5;
         max-height: 120px;
         overflow-y: auto;
         position: relative;
       }
-
+      
       .gli-url-actions {
         display: flex;
         gap: 8px;
@@ -538,7 +541,8 @@
         isIP: isIP,
         hasSuspicious: hasSuspicious,
         isVeryLong: isVeryLong,
-        displayURL: url.length > 100 ? url.substring(0, 80) + '...' + url.substring(url.length - 20) : url
+        // Always show the full URL in the modal; CSS will wrap long lines.
+        displayURL: url
       };
     } catch (err) {
       console.error('Gmail Link Interceptor: Invalid URL', url, err);

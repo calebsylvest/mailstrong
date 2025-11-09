@@ -4,9 +4,15 @@
 
 ### Interceptor Modal
 
-- [ ] Show full URL in the Interceptor modal  
+- [x] Show full URL in the Interceptor modal  
   - Rationale: users must see the complete target URL to make correct whitelist/security decisions. Truncation hides important host/path/query information and can cause mistaken approvals or rejections.  
-  - Next step: update the modal template and CSS to allow wrapping or horizontal scrolling of the URL field; ensure the content script/popup supplies the untruncated URL. Add tests that validate long URLs render and copy correctly.
+  - Next step (implemented): use multiline wrapping for the URL container to display the full URL. Implementation details:
+    - CSS approach chosen: multiline wrap using `white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;` with a sensible `max-height` and vertical scrollbar (`overflow-y: auto`) for very long URLs.
+    - Modal markup: the URL is rendered from a canonical URL string (`new URL(href).toString()` when possible) and displayed in the `.gli-full-url` container.
+    - Copy behavior: copy handler uses the canonical full URL string (not the trimmed/display text) so clipboard contains the exact target.
+    - Accessibility: the full URL is exposed via the DOM (so screen readers and titles/tooltips can access it); ensure contrast and font sizing are preserved.
+    - Testing / QA performed: manual verification loading the unpacked extension in Chrome (Mac) with several long test URLs (long path, many query params, encoded characters) and on a narrow viewport. Confirmed full URL renders, wraps across lines, and the Copy action copies the entire URL.
+    - Note: per request, no unit tests were added for this change.
 
 - [ ] Whitelist button is too close to Cancel, needs more space  
   - Rationale: proximity increases risk of accidental whitelist clicks, a security and UX issue. Clear separation reduces accidental user errors.  
@@ -61,4 +67,4 @@ Priority recommendations (short)
 5. Add URL character count (testing)  
 6. Improve Link History icons and add per-row copy
 
-If you want, I can apply the highest-priority changes (1 and 2) and open a PR with code and tests.
+If you want, I can apply the next-highest-priority change (Prevent rapid clicks on Copy URL) and open a PR with the code change.

@@ -18,7 +18,7 @@
   - Rationale: proximity increases risk of accidental whitelist clicks, a security and UX issue. Clear separation reduces accidental user errors.  
   - Next step: adjust modal layout/CSS to add spacing and, optionally, move whitelist to a safer location (e.g., confirm step or secondary action). Consider adding a visual affordance (color/outline) to differentiate primary vs destructive actions.
 
-- [ ] Prevent rapid clicking of the Copy URL button (debounce + single toast)  
+- [x] Prevent rapid clicking of the Copy URL button (debounce + single toast)  
   - Rationale: rapid clicks spawn many toast notifications and duplicate copy operations; this creates noisy UX and may confuse users. A debounce or disabling during the copy prevents spamming.  
   - Next step: implement a short debounce or disable the copy button for ~500ms after click; consolidate to show a single toast per copy action and ensure clipboard fallback behaviors are handled. Add unit/interaction tests.
 

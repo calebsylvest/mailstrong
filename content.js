@@ -14,6 +14,12 @@
   let modalOpen = false;
   let dismissTimer = null;
   let remainingSeconds = 5;
+  // Copy debounce / toast throttling state
+  let copyInProgress = false;
+  let lastCopyAt = 0;
+  const COPY_COOLDOWN_MS = 500;
+  const TOAST_COOLDOWN_MS = 1000;
+  let lastToastAt = 0;
 
   // Load settings from storage
   chrome.storage.sync.get(['enabled', 'whitelist', 'historyEnabled', 'statsEnabled'], (data) => {
@@ -204,13 +210,15 @@
       }
 
       .gli-copy-btn {
-        padding: 6px 12px;
+        height: 30px;
+        padding: 0 12px;
         background: #e3f2fd;
         color: #1976D2;
         border: 1px solid #90caf9;
         border-radius: 4px;
         font-size: 12px;
         font-weight: 600;
+        line-height: 30px;
         cursor: pointer;
         transition: all 0.2s;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -224,6 +232,11 @@
         background: #4CAF50;
         color: white;
         border-color: #4CAF50;
+      }
+
+      .gli-btn--disabled {
+        opacity: 0.6;
+        pointer-events: none;
       }
 
       .gli-security-section {
@@ -677,7 +690,7 @@
     confirmBtn.addEventListener('click', () => handleConfirm(url, analysis));
     cancelBtn.addEventListener('click', () => handleCancel(url, analysis));
     whitelistBtn.addEventListener('click', () => handleWhitelist(url, analysis.hostname));
-    copyBtn.addEventListener('click', () => handleCopyURL(url));
+  copyBtn.addEventListener('click', () => handleCopyURL(url, copyBtn));
     backdrop.addEventListener('click', () => handleCancel(url, analysis));
 
     // Delay pause activation to avoid immediate triggering
@@ -707,27 +720,96 @@
     }
   }
 
-  // Handle copy URL to clipboard
-  function handleCopyURL(url) {
-    navigator.clipboard.writeText(url).then(() => {
-      console.log('Gmail Link Interceptor: URL copied to clipboard');
-      
-      const copyBtn = document.getElementById('gli-copy-btn');
-      const originalText = copyBtn.innerHTML;
-      
-      copyBtn.innerHTML = '✓ Copied!';
-      copyBtn.classList.add('copied');
-      
+  // Handle copy URL to clipboard with debounce and single-toast throttling
+  function handleCopyURL(url, buttonEl) {
+    const now = Date.now();
+    if (copyInProgress || (now - lastCopyAt) < COPY_COOLDOWN_MS) {
+      return; // ignore rapid clicks
+    }
+
+    copyInProgress = true;
+    lastCopyAt = now;
+
+    const copyBtn = buttonEl || document.getElementById('gli-copy-btn');
+    const originalText = copyBtn ? copyBtn.innerHTML : null;
+
+    // Disable UI
+    if (copyBtn) {
+      copyBtn.classList.add('gli-btn--disabled');
+      copyBtn.setAttribute('aria-disabled', 'true');
+    }
+
+    const showCopyToastOnce = (msg) => {
+      const tNow = Date.now();
+      if ((tNow - lastToastAt) > TOAST_COOLDOWN_MS) {
+        showToast(msg);
+        lastToastAt = tNow;
+      }
+    };
+
+    const finishCopy = (success) => {
+      // Visual copied state
+      if (copyBtn) {
+        copyBtn.innerHTML = success ? '✓ Copied!' : (originalText || 'Copy');
+        if (success) copyBtn.classList.add('copied');
+      }
+
+      showCopyToastOnce(success ? 'URL copied to clipboard' : 'Failed to copy URL');
+
+      // Re-enable after a short cooldown; keep "copied" state visible briefly
       setTimeout(() => {
-        copyBtn.innerHTML = originalText;
-        copyBtn.classList.remove('copied');
-      }, 2000);
-      
-      showToast('URL copied to clipboard');
-    }).catch(err => {
-      console.error('Gmail Link Interceptor: Failed to copy URL', err);
-      showToast('Failed to copy URL');
-    });
+        copyInProgress = false;
+        if (copyBtn) {
+          if (originalText) copyBtn.innerHTML = originalText;
+          copyBtn.classList.remove('copied');
+          copyBtn.classList.remove('gli-btn--disabled');
+          copyBtn.removeAttribute('aria-disabled');
+        }
+      }, Math.max(COPY_COOLDOWN_MS, 500));
+    };
+
+    // Try navigator.clipboard first with fallback
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        console.log('Gmail Link Interceptor: URL copied to clipboard');
+        finishCopy(true);
+      }).catch(err => {
+        console.warn('Gmail Link Interceptor: Primary copy failed, trying fallback', err);
+        // Fallback
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = url;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'absolute';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          finishCopy(true);
+        } catch (err2) {
+          console.error('Gmail Link Interceptor: Copy fallback failed', err2);
+          finishCopy(false);
+        }
+      });
+    } else {
+      // Fallback when navigator.clipboard not available
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'absolute';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        finishCopy(true);
+      } catch (err) {
+        console.error('Gmail Link Interceptor: Copy fallback failed', err);
+        finishCopy(false);
+      }
+    }
   }
 
   // Handle confirm action

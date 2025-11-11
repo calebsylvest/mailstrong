@@ -1,6 +1,15 @@
 # Todo Tasks
+---
 
-## Improvements
+## FEATURES
+
+- [ ] Auto-dismiss customization
+  - currently the auto-dismiss function has a 5-second countdown
+  - allow user ability to change the auto-dismiss duration in the extension Options
+  - the options in seconds are 5, 10, 15, 25, and Off
+    - Off would disable the auto-dismiss
+
+## IMPROVEMENTS
 
 ### Interceptor Modal
 
@@ -46,7 +55,7 @@
   - Rationale: users often need the full domain/path for logging or debugging; a dedicated copy control improves usability.  
   - Next step: add per-row copy button that copies the full URL to clipboard and shows a single toast. Add debounce and tests for copy behavior.
 
-## Bugs
+## BUGS
 
 ### Test 7: Reset Statistics
 - [x] Statistics are not reseting after clicking the button  
@@ -59,7 +68,7 @@
   - Notes: add an integration test to confirm DB/storage is cleared and UI updates.
 
 ---
-Priority recommendations (short)
+## Priority recommendations (short)
 1. Show full URL in interceptor modal  
 2. Prevent rapid clicks on Copy URL (debounce + single toast)  
 3. Improve HTTP/HTTPS visual design  

@@ -69,8 +69,6 @@
 
 ---
 ## Priority recommendations (short)
-1. Show full URL in interceptor modal  
-2. Prevent rapid clicks on Copy URL (debounce + single toast)  
 3. Improve HTTP/HTTPS visual design  
 4. Make Options modal action buttons sticky  
 5. Add URL character count (testing)  

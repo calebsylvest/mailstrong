@@ -10,7 +10,7 @@
 - [ ] Screenshots (1-5 images, 1280x800 or 640x400)
 - [ ] Promotional images (optional but recommended)
 - [ ] Extension package (.zip)
-- [ ] Developer account ($5 one-time fee)
+- [x] Developer account ($5 one-time fee)
 
 ---
 

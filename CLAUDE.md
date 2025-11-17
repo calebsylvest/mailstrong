@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Gmail Link Interceptor is a Chrome extension (Manifest V3) that provides phishing protection by intercepting external links in Gmail emails. When a user clicks an external link, a modal displays security information (domain, URL, HTTPS status, suspicious patterns) before allowing the user to proceed, cancel, copy the URL, or whitelist the domain.
+Mailstrong is a Chrome extension (Manifest V3) that provides phishing protection by intercepting external links in Gmail emails. When a user clicks an external link, a modal displays security information (domain, URL, HTTPS status, suspicious patterns) before allowing the user to proceed, cancel, copy the URL, or whitelist the domain.
 
 ## Development Setup
 

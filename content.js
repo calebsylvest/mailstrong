@@ -1,10 +1,10 @@
-// Gmail Link Interceptor - Phase 3: Advanced Features
+// Mailstrong - Phase 3: Advanced Features
 // Includes: Copy URL, Recent Links History, Statistics/Analytics
 
 (function() {
   'use strict';
 
-  console.log('Gmail Link Interceptor v3.0: Content script loaded');
+  console.log('Mailstrong v3.0: Content script loaded');
 
   // Configuration
   let enabled = true;
@@ -27,7 +27,7 @@
     whitelist = data.whitelist || [];
     historyEnabled = data.historyEnabled !== false;
     statsEnabled = data.statsEnabled !== false;
-    console.log('Gmail Link Interceptor: Settings loaded', { 
+    console.log('Mailstrong: Settings loaded', { 
       enabled, 
       whitelist, 
       historyEnabled, 
@@ -40,9 +40,9 @@
   });
 
   function initializeInterceptor() {
-    console.log('Gmail Link Interceptor: Initializing...');
+    console.log('Mailstrong: Initializing...');
     waitForGmailLoad().then(() => {
-      console.log('Gmail Link Interceptor: Gmail loaded, starting observation');
+      console.log('Mailstrong: Gmail loaded, starting observation');
       injectModalStyles();
       attachInitialListeners();
       observeGmailChanges();
@@ -59,14 +59,14 @@
         
         if (mainArea) {
           clearInterval(checkInterval);
-          console.log('Gmail Link Interceptor: Main area detected');
+          console.log('Mailstrong: Main area detected');
           resolve();
         }
       }, 500);
 
       setTimeout(() => {
         clearInterval(checkInterval);
-        console.warn('Gmail Link Interceptor: Timeout waiting for Gmail');
+        console.warn('Mailstrong: Timeout waiting for Gmail');
         resolve();
       }, 10000);
     });
@@ -396,13 +396,13 @@
     `;
 
     document.head.appendChild(style);
-    console.log('Gmail Link Interceptor: Styles injected');
+    console.log('Mailstrong: Styles injected');
   }
 
   // Attach listeners to existing links
   function attachInitialListeners() {
     const links = findEmailLinks();
-    console.log(`Gmail Link Interceptor: Found ${links.length} initial links`);
+    console.log(`Mailstrong: Found ${links.length} initial links`);
     
     links.forEach(link => {
       if (!link.dataset.gliIntercepted) {
@@ -430,7 +430,7 @@
           }
         });
       } catch (e) {
-        console.error('Gmail Link Interceptor: Error with selector', selector, e);
+        console.error('Mailstrong: Error with selector', selector, e);
       }
     });
 
@@ -506,11 +506,11 @@
     
     if (!shouldInterceptLink(href)) return;
     if (isWhitelisted(href)) {
-      console.log('Gmail Link Interceptor: Whitelisted link, allowing', href);
+      console.log('Mailstrong: Whitelisted link, allowing', href);
       return;
     }
 
-    console.log('Gmail Link Interceptor: Link intercepted', href);
+    console.log('Mailstrong: Link intercepted', href);
 
     e.preventDefault();
     e.stopPropagation();
@@ -558,7 +558,7 @@
         displayURL: url
       };
     } catch (err) {
-      console.error('Gmail Link Interceptor: Invalid URL', url, err);
+      console.error('Mailstrong: Invalid URL', url, err);
       return {
         full: url,
         protocol: 'unknown',
@@ -676,7 +676,7 @@
     // Record interception in history and stats
     recordInterception(url, analysis);
     
-    console.log('Gmail Link Interceptor: Modal displayed');
+    console.log('Mailstrong: Modal displayed');
   }
 
   // Attach modal event listeners
@@ -771,10 +771,10 @@
     // Try navigator.clipboard first with fallback
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(() => {
-        console.log('Gmail Link Interceptor: URL copied to clipboard');
+        console.log('Mailstrong: URL copied to clipboard');
         finishCopy(true);
       }).catch(err => {
-        console.warn('Gmail Link Interceptor: Primary copy failed, trying fallback', err);
+        console.warn('Mailstrong: Primary copy failed, trying fallback', err);
         // Fallback
         try {
           const ta = document.createElement('textarea');
@@ -788,7 +788,7 @@
           document.body.removeChild(ta);
           finishCopy(true);
         } catch (err2) {
-          console.error('Gmail Link Interceptor: Copy fallback failed', err2);
+          console.error('Mailstrong: Copy fallback failed', err2);
           finishCopy(false);
         }
       });
@@ -806,7 +806,7 @@
         document.body.removeChild(ta);
         finishCopy(true);
       } catch (err) {
-        console.error('Gmail Link Interceptor: Copy fallback failed', err);
+        console.error('Mailstrong: Copy fallback failed', err);
         finishCopy(false);
       }
     }
@@ -814,7 +814,7 @@
 
   // Handle confirm action
   function handleConfirm(url, analysis) {
-    console.log('Gmail Link Interceptor: User confirmed link', url);
+    console.log('Mailstrong: User confirmed link', url);
     recordAction(url, analysis, 'opened');
     window.open(url, '_blank', 'noopener,noreferrer');
     removeModal();
@@ -822,7 +822,7 @@
 
   // Handle cancel action
   function handleCancel(url, analysis) {
-    console.log('Gmail Link Interceptor: User cancelled');
+    console.log('Mailstrong: User cancelled');
     recordAction(url, analysis, 'cancelled');
     removeModal();
   }

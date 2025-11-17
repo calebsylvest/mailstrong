@@ -1,4 +1,4 @@
-// Gmail Link Interceptor - Options Page Logic with Statistics and History
+// Mailstrong - Options Page Logic with Statistics and History
 
 (function() {
   'use strict';

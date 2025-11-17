@@ -1,8 +1,8 @@
-# Gmail Link Interceptor - Your Shield Against Phishing
+# Mailstrong - Your Shield Against Phishing
 
 > STAY SAFE FROM PHISHING ATTACKS
 
-Gmail Link Interceptor adds a crucial security layer to your Gmail inbox. Before any external link opens, you'll see a detailed confirmation modal with security information, giving you time to verify the destination and make informed decisions.
+Mailstrong adds a crucial security layer to your Gmail inbox. Before any external link opens, you'll see a detailed confirmation modal with security information, giving you time to verify the destination and make informed decisions.
 
 ---
 

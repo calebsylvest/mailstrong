@@ -6,21 +6,6 @@ Mailstrong adds a crucial security layer to your Gmail inbox. Before any externa
 
 ---
 
-## Manual Installation instructions
-
-Manual installation is required until the extension is published in the Chrome Web Store
-
-1. Download the project zip file
-1. Unzip the file
-1. In Chrome, go to `chrome://extensions/`
-1. Click the "Load unpacked" button (top left)
-1. Navigate to the unzipped directory
-1. Click the "Select" button
-1. The extension is installed. Activate if not already switched on.
-1. Go to `mail.google.com` and give it a try
-
----
-
 ## KEY FEATURES
 
 ### ✓ Link Interception
@@ -96,12 +81,23 @@ Manual installation is required until the extension is published in the Chrome W
 - Export statistics reports
 - And more based on your feedback!
 
-Need help? Have suggestions? Contact us through the support link.
+---
 
-Stay safe online! 🛡️
+## Manual Installation instructions
+
+Manual installation is required until the extension is published in the Chrome Web Store
+
+1. Download the project zip file
+1. Unzip the file
+1. In Chrome, go to `chrome://extensions/`
+1. Click the "Load unpacked" button (top left)
+1. Navigate to the unzipped directory
+1. Click the "Select" button
+1. The extension is installed. Activate if not already switched on.
+1. Go to `mail.google.com` and give it a try
 
 ---
 
-Watch the Video walkthrough:
+Need help? Have suggestions? Submit an issue in the Github repo: https://github.com/calebsylvest/mailstrong
 
-https://youtu.be/8DkL-eUV_Tg?list=PLGQf8yzLXm8EV7VCT7hKc71w-0GEuiooW
+Stay safe online! 🛡️

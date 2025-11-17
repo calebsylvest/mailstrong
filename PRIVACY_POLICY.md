@@ -155,7 +155,7 @@ We may update this privacy policy if our data practices change. When we do:
 ## Open Source Transparency
 
 Mailstrong is open source. You can:
-- Review the complete source code: [GitHub Repository URL]
+- Review the complete source code: https://github.com/calebsylvest/mailstrong
 - Verify our privacy claims by reading the code
 - Submit issues or contribute improvements
 - Fork and modify for your own use
@@ -172,8 +172,8 @@ This extension complies with:
 
 For privacy questions, concerns, or requests:
 
-- **GitHub Issues:** [Your GitHub Repository URL]
-- **Email:** [Your Contact Email]
+- **GitHub Issues:** https://github.com/calebsylvest/mailstrong/issues
+- **Email:** caleb.sylvest@gmail.com
 - **Chrome Web Store:** Use the "Support" tab on the extension listing
 
 We'll respond to privacy inquiries within 7 business days.
@@ -268,4 +268,4 @@ By installing and using Mailstrong, you consent to this privacy policy and the l
 
 **Summary:** Mailstrong respects your privacy by operating entirely locally. No personal data is collected, no information is transmitted to external servers, and you have complete control over all stored data. However, you use this extension at your own risk and are solely responsible for your security decisions.
 
-For the latest version of this policy, visit: [URL where you host this document]
+For the latest version of this policy, visit: https://github.com/calebsylvest/mailstrong

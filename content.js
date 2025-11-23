@@ -52,23 +52,39 @@
   // Wait for Gmail's main interface to load
   function waitForGmailLoad() {
     return new Promise((resolve) => {
+      // Check if Gmail elements already exist
+      const checkGmailLoaded = () => {
+        return document.querySelector('[role="main"]') ||
+               document.querySelector('.AO') ||
+               document.querySelector('.nH') ||
+               document.querySelector('[role="navigation"]') ||
+               document.querySelector('.bkK') || // Gmail sidebar
+               document.body.classList.contains('loaded');
+      };
+
+      // If already loaded, resolve immediately
+      if (checkGmailLoaded()) {
+        console.log('Mailstrong: Gmail already loaded');
+        resolve();
+        return;
+      }
+
+      let attempts = 0;
+      const maxAttempts = 30; // 30 attempts * 500ms = 15 seconds total
+
       const checkInterval = setInterval(() => {
-        const mainArea = document.querySelector('[role="main"]') || 
-                        document.querySelector('.AO') || 
-                        document.querySelector('.nH');
-        
-        if (mainArea) {
+        attempts++;
+
+        if (checkGmailLoaded()) {
           clearInterval(checkInterval);
-          console.log('Mailstrong: Main area detected');
+          console.log('Mailstrong: Gmail interface detected');
+          resolve();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(checkInterval);
+          console.log('Mailstrong: Proceeding without Gmail confirmation (this is normal for some Gmail views)');
           resolve();
         }
       }, 500);
-
-      setTimeout(() => {
-        clearInterval(checkInterval);
-        console.warn('Mailstrong: Timeout waiting for Gmail');
-        resolve();
-      }, 10000);
     });
   }
 

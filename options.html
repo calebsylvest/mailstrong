@@ -250,10 +250,19 @@
       font-weight: 600;
     }
 
+    /* One focus ring for every interactive element, matching the intercept modal */
     button:focus-visible,
-    a:focus-visible {
+    a:focus-visible,
+    .tab:focus-visible,
+    .toggle-switch:focus-visible {
       outline: 2px solid var(--blue);
       outline-offset: 2px;
+    }
+
+    /* Panels are focusable (WAI-ARIA tabs pattern); keep their ring inside the edge */
+    .tab-content:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: -2px;
     }
 
     .btn-primary {
@@ -534,30 +543,31 @@
 </head>
 <body>
   <div class="container">
-    <div class="header">
+    <header class="header">
       <h1>
         <img class="brand-icon" src="images/mailstrong-icon.svg" alt="">
         <img class="brand-wordmark" src="images/mailstrong-text.svg" alt="Mailstrong">
       </h1>
       <p class="subtitle">Stay safe from phishing and malicious links</p>
-    </div>
+    </header>
 
-    <div class="tabs">
-      <div class="tab active" data-tab="general">General</div>
-      <div class="tab" data-tab="statistics">Statistics</div>
-      <div class="tab" data-tab="history">History</div>
+    <main>
+    <div class="tabs" role="tablist" aria-label="Options sections">
+      <div class="tab active" role="tab" id="tab-general" data-tab="general" aria-selected="true" aria-controls="general-tab" tabindex="0">General</div>
+      <div class="tab" role="tab" id="tab-statistics" data-tab="statistics" aria-selected="false" aria-controls="statistics-tab" tabindex="-1">Statistics</div>
+      <div class="tab" role="tab" id="tab-history" data-tab="history" aria-selected="false" aria-controls="history-tab" tabindex="-1">History</div>
     </div>
 
     <!-- General Tab -->
-    <div class="tab-content active" id="general-tab">
+    <div class="tab-content active" id="general-tab" role="tabpanel" aria-labelledby="tab-general" tabindex="0">
       <div class="section">
         <h2>Extension Status</h2>
         <div class="toggle-container">
           <div class="toggle-info">
-            <div class="toggle-label">Link Interception</div>
-            <div class="toggle-description">Intercept external links in Gmail emails</div>
+            <div class="toggle-label" id="enabledLabel">Link Interception</div>
+            <div class="toggle-description" id="enabledDesc">Intercept external links in Gmail emails</div>
           </div>
-          <div class="toggle-switch" id="enabledToggle"></div>
+          <div class="toggle-switch" id="enabledToggle" role="switch" tabindex="0" aria-checked="false" aria-labelledby="enabledLabel" aria-describedby="enabledDesc"></div>
         </div>
       </div>
 
@@ -565,18 +575,18 @@
         <h2>Features</h2>
         <div class="toggle-container">
           <div class="toggle-info">
-            <div class="toggle-label">Link History</div>
-            <div class="toggle-description">Keep track of intercepted links for security review</div>
+            <div class="toggle-label" id="historyLabel">Link History</div>
+            <div class="toggle-description" id="historyDesc">Keep track of intercepted links for security review</div>
           </div>
-          <div class="toggle-switch active" id="historyToggle"></div>
+          <div class="toggle-switch active" id="historyToggle" role="switch" tabindex="0" aria-checked="true" aria-labelledby="historyLabel" aria-describedby="historyDesc"></div>
         </div>
-        
+
         <div class="toggle-container">
           <div class="toggle-info">
-            <div class="toggle-label">Statistics</div>
-            <div class="toggle-description">Track security metrics and link patterns</div>
+            <div class="toggle-label" id="statsLabel">Statistics</div>
+            <div class="toggle-description" id="statsDesc">Track security metrics and link patterns</div>
           </div>
-          <div class="toggle-switch active" id="statsToggle"></div>
+          <div class="toggle-switch active" id="statsToggle" role="switch" tabindex="0" aria-checked="true" aria-labelledby="statsLabel" aria-describedby="statsDesc"></div>
         </div>
       </div>
 
@@ -600,7 +610,7 @@
         <button class="btn-secondary" id="resetBtn">Reset to Defaults</button>
       </div>
 
-      <div id="status" class="status"></div>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
 
       <div class="footer">
         <p>Mailstrong v3.0 | <a href="#" id="privacyLink">Privacy Policy</a></p>
@@ -608,7 +618,7 @@
     </div>
 
     <!-- Statistics Tab -->
-    <div class="tab-content" id="statistics-tab">
+    <div class="tab-content" id="statistics-tab" role="tabpanel" aria-labelledby="tab-statistics" tabindex="0">
       <div class="section">
         <div class="info-box">
           <div class="info-box-title">Your Security at a Glance</div>
@@ -673,7 +683,7 @@
     </div>
 
     <!-- History Tab -->
-    <div class="tab-content" id="history-tab">
+    <div class="tab-content" id="history-tab" role="tabpanel" aria-labelledby="tab-history" tabindex="0">
       <div class="section">
         <div class="info-box">
           <div class="info-box-title">Recent Link Activity</div>
@@ -695,6 +705,7 @@
         <button class="btn-danger" id="clearHistoryBtn">Clear History</button>
       </div>
     </div>
+    </main>
   </div>
 
   <script src="options.js"></script>

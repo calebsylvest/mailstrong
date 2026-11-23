@@ -3,26 +3,59 @@
 (function() {
   'use strict';
 
-  // Tab Management
-  const tabs = document.querySelectorAll('.tab');
+  // Tab Management (WAI-ARIA tabs pattern, automatic activation)
+  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
   const tabContents = document.querySelectorAll('.tab-content');
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const tabName = tab.dataset.tab;
-      
-      tabs.forEach(t => t.classList.remove('active'));
-      tabContents.forEach(tc => tc.classList.remove('active'));
-      
-      tab.classList.add('active');
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-      
-      // Load data when switching to stats or history tabs
-      if (tabName === 'statistics') {
-        loadStatistics();
-      } else if (tabName === 'history') {
-        loadHistory();
+  function activateTab(tab, { focus = false } = {}) {
+    const tabName = tab.dataset.tab;
+
+    // Roving tabindex: only the selected tab is in the Tab order
+    tabs.forEach(t => {
+      const selected = t === tab;
+      t.classList.toggle('active', selected);
+      t.setAttribute('aria-selected', String(selected));
+      t.tabIndex = selected ? 0 : -1;
+    });
+    tabContents.forEach(tc => tc.classList.toggle('active', tc.id === `${tabName}-tab`));
+
+    if (focus) tab.focus();
+
+    // Load data when switching to stats or history tabs
+    if (tabName === 'statistics') {
+      loadStatistics();
+    } else if (tabName === 'history') {
+      loadHistory();
+    }
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => activateTab(tab));
+
+    tab.addEventListener('keydown', (e) => {
+      let target = null;
+      switch (e.key) {
+        case 'ArrowRight':
+          target = tabs[(index + 1) % tabs.length];
+          break;
+        case 'ArrowLeft':
+          target = tabs[(index - 1 + tabs.length) % tabs.length];
+          break;
+        case 'Home':
+          target = tabs[0];
+          break;
+        case 'End':
+          target = tabs[tabs.length - 1];
+          break;
+        case 'Enter':
+        case ' ':
+          target = tab;
+          break;
+        default:
+          return;
       }
+      e.preventDefault();
+      activateTab(target, { focus: true });
     });
   });
 
@@ -44,17 +77,23 @@
   // Load settings when page opens
   loadSettings();
 
-  // Toggle event listeners
-  enabledToggle.addEventListener('click', () => {
-    enabledToggle.classList.toggle('active');
-  });
+  // Toggles are role="switch": the 'active' class drives the look, aria-checked mirrors it
+  function setToggle(toggle, on) {
+    toggle.classList.toggle('active', on);
+    toggle.setAttribute('aria-checked', String(on));
+  }
 
-  historyToggle.addEventListener('click', () => {
-    historyToggle.classList.toggle('active');
-  });
+  [enabledToggle, historyToggle, statsToggle].forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      setToggle(toggle, !toggle.classList.contains('active'));
+    });
 
-  statsToggle.addEventListener('click', () => {
-    statsToggle.classList.toggle('active');
+    toggle.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault(); // stop Space from scrolling the page
+        setToggle(toggle, !toggle.classList.contains('active'));
+      }
+    });
   });
 
   // Button event listeners
@@ -73,9 +112,9 @@
       const historyEnabled = data.historyEnabled !== false;
       const statsEnabled = data.statsEnabled !== false;
       
-      if (enabled) enabledToggle.classList.add('active');
-      if (historyEnabled) historyToggle.classList.add('active');
-      if (statsEnabled) statsToggle.classList.add('active');
+      setToggle(enabledToggle, enabled);
+      setToggle(historyToggle, historyEnabled);
+      setToggle(statsToggle, statsEnabled);
 
       // Set whitelist
       const whitelist = data.whitelist || [];

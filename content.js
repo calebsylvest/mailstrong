@@ -124,7 +124,7 @@
         --gli-green: #2e7d32;
         --gli-green-hover: #256b29;
         --gli-red: #c62828;
-        --gli-blue: #1a6dd8;
+        --gli-blue: #1b6dd6;
         --gli-amber: #8a5a00;
         --gli-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         --gli-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;

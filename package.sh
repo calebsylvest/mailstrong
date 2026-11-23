@@ -31,6 +31,8 @@ REQUIRED_FILES=(
     "icons/icon16-disabled.png"
     "icons/icon48-disabled.png"
     "icons/icon128-disabled.png"
+    "images/mailstrong-icon.svg"
+    "images/mailstrong-text.svg"
 )
 
 # Step 1: Validate all required files exist
@@ -59,7 +61,7 @@ echo ""
 echo "🧹 Cleaning previous build..."
 rm -rf "$DIST_DIR"
 rm -f "$PACKAGE_NAME"
-mkdir -p "$DIST_DIR/icons"
+mkdir -p "$DIST_DIR/icons" "$DIST_DIR/images"
 
 # Step 3: Copy required files to dist
 echo ""

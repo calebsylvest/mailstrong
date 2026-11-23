@@ -1,91 +1,51 @@
-# Mailstrong - Your Shield Against Phishing
+# Mailstrong
 
-> STAY SAFE FROM PHISHING ATTACKS
+> A pause before every link in Gmail
 
-Mailstrong adds a crucial security layer to your Gmail inbox. Before any external link opens, you'll see a detailed confirmation modal with security information, giving you time to verify the destination and make informed decisions.
+Phishing works because clicking is fast. Mailstrong puts a short confirmation in front of every external link in Gmail, showing where the link really goes, so you can decide before anything opens.
 
----
+## What you see before a link opens
 
-## KEY FEATURES
+- The real destination, even behind Gmail's `google.com/url` redirects
+- The domain, shown large, and the full URL
+- Whether the connection is HTTPS or plain HTTP
+- Warnings for warning signs: an IP address instead of a domain, unusual characters, or an unusually long URL
 
-### ✓ Link Interception
-- Automatically detects and intercepts all external links in Gmail emails
-- Shows a clear confirmation modal before opening any link
-- Prevents accidental clicks on phishing or malicious links
+## What you can do
 
-### ✓ Security Insights
-- Displays full URL and domain name prominently
-- Highlights HTTPS vs HTTP security status
-- Warns about suspicious patterns (IP addresses, unusual characters, very long URLs)
-- Helps you spot phishing attempts before it's too late
+- **Open Link:** opens it in a new tab
+- **Cancel** (or press Escape): closes without opening
+- **Copy URL:** check the link in another tool first
+- **Trust this domain:** future links to it open directly
 
-### ✓ Smart Actions
-- Open Link - Proceed to the destination in a new tab
-- Cancel - Close modal without opening the link
-- Copy URL - Copy the link to clipboard for verification in security tools
-- Whitelist - Add trusted domains to skip future confirmations
+If you do nothing, the confirmation closes after 5 seconds without opening the link. It pauses while your pointer is over it.
 
-### ✓ Link History
-- Review the last 50 intercepted links
-- See what you opened vs cancelled
-- Track timestamps and security status
-- Useful for security audits and incident review
+## History and statistics (optional)
 
-### ✓ Statistics Dashboard
-- Track total links intercepted
-- See how many suspicious links you've blocked
-- Monitor HTTP vs HTTPS ratio
-- Identify most common domains
-- Quantify your security improvements
+- Your last 50 intercepted links: what you opened, cancelled or trusted, and when
+- Totals for links checked, opened and cancelled, HTTPS vs HTTP, your most common domains, and suspicious links you chose not to open
+- Either one can be turned off in settings
 
-### ✓ Customizable Settings
-- Whitelist trusted domains to skip confirmations
-- Toggle history and statistics tracking
-- Enable/disable the extension with one click
-- All settings sync across your Chrome browsers
+## Settings
 
-## PRIVACY & SECURITY
-- 100% local processing - no data sent to external servers
-- No tracking or telemetry
-- No personal information collected
-- All data stored locally on your device
-- Open source code available for review
+- Manage your trusted domains
+- Turn Mailstrong on or off by clicking its toolbar icon
+- Works fully from the keyboard
 
-## PERFECT FOR
-- Professionals handling sensitive information
-- Anyone who receives emails from unknown senders
-- Security-conscious individuals
-- Corporate users needing audit trails
-- People who want to understand their email threat landscape
+## Privacy
 
-## HOW IT WORKS
-1. Install the extension
-2. Open Gmail as usual
-3. When you click an external link, a modal appears
-4. Review the URL and security information
-5. Choose to open, cancel, or whitelist the domain
-6. Track your activity in the Statistics and History tabs
+- Mailstrong has no servers and sends nothing anywhere. No tracking, no analytics, no accounts.
+- History and statistics stay on your device.
+- Your settings and trusted domains sync between your Chrome browsers through your Google account, like any Chrome setting.
+- The code is open source, here in this repo. See [PRIVACY_POLICY.md](PRIVACY_POLICY.md) for the full policy.
 
-## LIGHTWEIGHT & FAST
-- Minimal performance impact
-- No Gmail slowdown
-- Instant modal display (<100ms)
-- Small memory footprint
-
-## MADE FOR GMAIL
-- Specifically designed for Gmail's web interface (mail.google.com). Works seamlessly with Gmail's dynamic content loading.
-
-## UPCOMING FEATURES
-- Domain reputation checks
-- Enhanced threat detection
-- Export statistics reports
-- And more based on your feedback!
+Works on Gmail in the browser (`mail.google.com`).
 
 ---
 
-## Manual Installation instructions
+## Install from source
 
-Manual installation is required until the extension is published in the Chrome Web Store
+To run Mailstrong from this repo instead of the Chrome Web Store:
 
 1. Download the project zip file
 1. Unzip the file
@@ -98,6 +58,4 @@ Manual installation is required until the extension is published in the Chrome W
 
 ---
 
-Need help? Have suggestions? Submit an issue in the Github repo: https://github.com/calebsylvest/mailstrong
-
-Stay safe online! 🛡️
+Questions or ideas? [Open an issue](https://github.com/calebsylvest/mailstrong/issues).

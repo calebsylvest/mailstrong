@@ -187,7 +187,6 @@
     if (domains.length === 0) {
       topDomainsContainer.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">📊</div>
           <div class="empty-state-text">No data yet</div>
           <div class="empty-state-hint">Start clicking links to see statistics</div>
         </div>
@@ -241,7 +240,6 @@
       if (history.length === 0) {
         historyContainer.innerHTML = `
           <div class="empty-state">
-            <div class="empty-state-icon">🔗</div>
             <div class="empty-state-text">No link history yet</div>
             <div class="empty-state-hint">Intercepted links will appear here</div>
           </div>
@@ -272,7 +270,7 @@
                   </span>
                 </td>
                 <td class="security-badge">
-                  ${entry.isSecure ? '🔒' : '🔓'}
+                  ${entry.isSecure ? '<span class="conn-badge">HTTPS</span>' : '<span class="conn-badge insecure">HTTP</span>'}
                 </td>
               </tr>
             `).join('')}
@@ -344,10 +342,10 @@
   // Helper: Get action label
   function getActionLabel(action) {
     const labels = {
-      'opened': '✓ Opened',
-      'cancelled': '✗ Cancelled',
-      'whitelisted': '⊕ Whitelisted',
-      'pending': '⏳ Pending'
+      'opened': 'Opened',
+      'cancelled': 'Cancelled',
+      'whitelisted': 'Whitelisted',
+      'pending': 'Pending'
     };
     return labels[action] || action;
   }

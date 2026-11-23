@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mailstrong - Options</title>
   <style>
+    :root {
+      --ink: #111111;
+      --muted: #6b6b6b;
+      --surface: #f3f3f3;
+      --rule: #e3e3e3;
+      --green: #2e7d32;
+      --green-hover: #256b29;
+      --red: #c62828;
+      --red-hover: #a82020;
+      --blue: #1a6dd8;
+      --amber: #8a5a00;
+      --sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -12,67 +27,88 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: #f5f5f5;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: #fafafa;
       min-width: 600px;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
       max-width: 900px;
       margin: 0 auto;
-      background: white;
+      background: #ffffff;
       min-height: 100vh;
+      box-shadow: 0 0 0 1px var(--rule);
     }
 
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 30px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 32px 32px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
     .header h1 {
-      font-size: 28px;
-      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      line-height: 0;
+    }
+
+    .header .brand-icon {
+      width: 28px;
+      height: 40px;
+      display: block;
+    }
+
+    .header .brand-wordmark {
+      width: 145px;
+      height: 36px;
+      display: block;
     }
 
     .header .subtitle {
+      margin-left: auto;
       font-size: 14px;
-      opacity: 0.9;
+      color: var(--muted);
     }
 
     .tabs {
       display: flex;
-      background: white;
-      border-bottom: 2px solid #e0e0e0;
+      gap: 8px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--rule);
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
     .tab {
-      padding: 16px 24px;
+      padding: 14px 4px 12px;
+      margin-right: 16px;
       font-size: 14px;
       font-weight: 600;
-      color: #666;
+      color: var(--muted);
       cursor: pointer;
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
     }
 
     .tab:hover {
-      background: #f5f5f5;
-      color: #333;
+      color: var(--ink);
     }
 
     .tab.active {
-      color: #667eea;
-      border-bottom-color: #667eea;
+      color: var(--ink);
+      border-bottom-color: var(--ink);
     }
 
     .tab-content {
       display: none;
-      padding: 30px;
+      padding: 32px;
     }
 
     .tab-content.active {
@@ -80,32 +116,34 @@
     }
 
     .section {
-      margin-bottom: 30px;
+      margin-bottom: 32px;
     }
 
     .section h2 {
-      font-size: 18px;
-      color: #333;
-      margin-bottom: 16px;
+      font-size: 13px;
       font-weight: 600;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
     }
 
     .section-description {
       font-size: 14px;
-      color: #666;
+      color: var(--muted);
       margin-bottom: 16px;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .toggle-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
       padding: 16px;
-      background: #f9f9f9;
+      background: var(--surface);
       border-radius: 8px;
-      border: 1px solid #e0e0e0;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .toggle-info {
@@ -114,30 +152,30 @@
 
     .toggle-label {
       font-size: 14px;
-      color: #333;
+      color: var(--ink);
       font-weight: 600;
       margin-bottom: 4px;
     }
 
     .toggle-description {
       font-size: 13px;
-      color: #666;
+      color: var(--muted);
       line-height: 1.4;
     }
 
     .toggle-switch {
       position: relative;
-      width: 50px;
-      height: 26px;
-      background: #ccc;
-      border-radius: 13px;
+      width: 44px;
+      height: 24px;
+      background: #8a8a8a;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.2s;
       flex-shrink: 0;
     }
 
     .toggle-switch.active {
-      background: #4CAF50;
+      background: var(--green);
     }
 
     .toggle-switch::after {
@@ -145,21 +183,21 @@
       position: absolute;
       top: 3px;
       left: 3px;
-      width: 20px;
-      height: 20px;
-      background: white;
+      width: 18px;
+      height: 18px;
+      background: #ffffff;
       border-radius: 50%;
-      transition: left 0.3s;
+      transition: left 0.2s;
     }
 
     .toggle-switch.active::after {
-      left: 27px;
+      left: 23px;
     }
 
     label {
       display: block;
       font-size: 14px;
-      color: #555;
+      color: var(--ink);
       margin-bottom: 8px;
       font-weight: 500;
     }
@@ -167,88 +205,102 @@
     textarea {
       width: 100%;
       min-height: 120px;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
+      padding: 12px 14px;
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.5;
       resize: vertical;
     }
 
     textarea:focus {
-      outline: none;
-      border-color: #667eea;
+      outline: 2px solid var(--blue);
+      outline-offset: 1px;
+      border-color: var(--blue);
+    }
+
+    textarea::placeholder {
+      color: #8a8a8a;
     }
 
     .help-text {
-      font-size: 12px;
-      color: #888;
-      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
     }
 
     .button-group {
       display: flex;
       gap: 12px;
-      margin-top: 20px;
+      margin-top: 24px;
     }
 
     button {
-      padding: 12px 24px;
+      height: 40px;
+      padding: 0 20px;
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
+      font-family: var(--sans);
       font-size: 14px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background 0.15s;
       font-weight: 600;
     }
 
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+
     .btn-primary {
-      background: #667eea;
-      color: white;
+      background: var(--green);
+      color: #ffffff;
     }
 
     .btn-primary:hover {
-      background: #5568d3;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+      background: var(--green-hover);
     }
 
     .btn-secondary {
-      background: #f0f0f0;
-      color: #333;
+      background: var(--rule);
+      color: var(--ink);
     }
 
     .btn-secondary:hover {
-      background: #e0e0e0;
+      background: #d6d6d6;
     }
 
     .btn-danger {
-      background: #f44336;
-      color: white;
+      background: var(--red);
+      color: #ffffff;
     }
 
     .btn-danger:hover {
-      background: #da190b;
+      background: var(--red-hover);
     }
 
     .status {
       padding: 12px 16px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 13px;
       margin-top: 16px;
       display: none;
+      background: var(--surface);
+      color: var(--ink);
+      border-left: 3px solid var(--ink);
     }
 
     .status.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
+      border-left-color: var(--green);
     }
 
     .status.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      border-left-color: var(--red);
+      color: var(--red);
     }
 
     .status.show {
@@ -258,44 +310,49 @@
     /* Statistics Styles */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
     }
 
     .stat-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 20px;
+      background: var(--surface);
+      color: var(--ink);
+      padding: 18px 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-top: 3px solid var(--ink);
     }
 
     .stat-card.green {
-      background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+      border-top-color: var(--green);
     }
 
     .stat-card.orange {
-      background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+      border-top-color: var(--red);
     }
 
     .stat-card.blue {
-      background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+      border-top-color: var(--blue);
     }
 
     .stat-value {
-      font-size: 32px;
-      font-weight: bold;
+      font-family: var(--mono);
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.1;
       margin-bottom: 8px;
     }
 
     .stat-label {
-      font-size: 13px;
-      opacity: 0.9;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
     }
 
     .domain-list {
-      background: #f9f9f9;
+      background: var(--surface);
       border-radius: 8px;
       overflow: hidden;
     }
@@ -305,7 +362,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 12px 16px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--rule);
     }
 
     .domain-item:last-child {
@@ -313,13 +370,13 @@
     }
 
     .domain-name {
-      font-weight: 600;
-      color: #333;
-      font-family: 'Courier New', monospace;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 14px;
     }
 
     .domain-count {
-      color: #666;
+      color: var(--muted);
       font-size: 13px;
     }
 
@@ -327,91 +384,109 @@
     .history-table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      background: #ffffff;
     }
 
     .history-table th {
-      background: #f5f5f5;
-      padding: 12px;
+      padding: 10px 12px;
       text-align: left;
       font-size: 12px;
       font-weight: 600;
-      color: #666;
+      color: var(--ink);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid var(--ink);
     }
 
     .history-table td {
       padding: 12px;
-      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--rule);
       font-size: 13px;
-      color: #333;
+      color: var(--ink);
+      vertical-align: middle;
     }
 
-    .history-table tr:hover {
-      background: #f9f9f9;
+    .history-table tr:hover td {
+      background: #fafafa;
     }
 
     .history-time {
-      color: #666;
+      color: var(--muted);
       font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .history-table td.history-time {
+      color: var(--muted);
     }
 
     .history-domain {
-      font-family: 'Courier New', monospace;
-      color: #1976D2;
+      font-family: var(--mono);
+      color: var(--blue);
+    }
+
+    .history-table td.history-domain {
+      color: var(--blue);
     }
 
     .history-action {
       display: inline-block;
       padding: 4px 8px;
       border-radius: 4px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
+      background: var(--surface);
+      color: var(--ink);
     }
 
     .history-action.opened {
-      background: #d4edda;
-      color: #155724;
+      color: var(--green);
     }
 
     .history-action.cancelled {
-      background: #f8d7da;
-      color: #721c24;
+      color: var(--red);
     }
 
     .history-action.whitelisted {
-      background: #d1ecf1;
-      color: #0c5460;
+      color: var(--blue);
     }
 
     .history-action.pending {
-      background: #fff3cd;
-      color: #856404;
+      color: var(--amber);
     }
 
     .security-badge {
-      font-size: 16px;
+      font-size: 12px;
+    }
+
+    .conn-badge {
+      display: inline-block;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      background: var(--green);
+    }
+
+    .conn-badge.insecure {
+      background: var(--red);
     }
 
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
-      color: #999;
-    }
-
-    .empty-state-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-      opacity: 0.5;
+      padding: 48px 20px;
+      color: var(--muted);
+      background: var(--surface);
+      border-radius: 8px;
     }
 
     .empty-state-text {
-      font-size: 16px;
-      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
     }
 
     .empty-state-hint {
@@ -421,37 +496,49 @@
     .footer {
       margin-top: 40px;
       padding-top: 20px;
-      border-top: 1px solid #e0e0e0;
+      border-top: 1px solid var(--rule);
       text-align: center;
-      font-size: 12px;
-      color: #888;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer a {
+      color: var(--blue);
     }
 
     .info-box {
-      background: #e3f2fd;
-      border-left: 4px solid #2196F3;
-      padding: 16px;
-      border-radius: 4px;
-      margin-bottom: 20px;
+      padding: 0 0 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--rule);
     }
 
     .info-box-title {
+      font-size: 16px;
       font-weight: 600;
-      color: #1976D2;
-      margin-bottom: 8px;
+      color: var(--ink);
+      margin-bottom: 6px;
     }
 
     .info-box-text {
-      font-size: 13px;
-      color: #0d47a1;
+      font-size: 14px;
+      color: var(--muted);
       line-height: 1.5;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Mailstrong</h1>
+      <h1>
+        <img class="brand-icon" src="images/mailstrong-icon.svg" alt="">
+        <img class="brand-wordmark" src="images/mailstrong-text.svg" alt="Mailstrong">
+      </h1>
       <p class="subtitle">Stay safe from phishing and malicious links</p>
     </div>
 
@@ -524,7 +611,7 @@
     <div class="tab-content" id="statistics-tab">
       <div class="section">
         <div class="info-box">
-          <div class="info-box-title">🛡️ Your Security at a Glance</div>
+          <div class="info-box-title">Your Security at a Glance</div>
           <div class="info-box-text">
             Track your link interception activity and see how the extension helps protect you from potential threats.
           </div>
@@ -573,7 +660,6 @@
         <p class="section-description">Most frequently intercepted domains</p>
         <div class="domain-list" id="topDomains">
           <div class="empty-state">
-            <div class="empty-state-icon">📊</div>
             <div class="empty-state-text">No data yet</div>
             <div class="empty-state-hint">Start clicking links to see statistics</div>
           </div>
@@ -590,7 +676,7 @@
     <div class="tab-content" id="history-tab">
       <div class="section">
         <div class="info-box">
-          <div class="info-box-title">📜 Recent Link Activity</div>
+          <div class="info-box-title">Recent Link Activity</div>
           <div class="info-box-text">
             Review the last 50 intercepted links. All data is stored locally on your device.
           </div>
@@ -598,7 +684,6 @@
 
         <div id="historyContainer">
           <div class="empty-state">
-            <div class="empty-state-icon">🔗</div>
             <div class="empty-state-text">No link history yet</div>
             <div class="empty-state-hint">Intercepted links will appear here</div>
           </div>

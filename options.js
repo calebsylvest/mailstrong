@@ -3,6 +3,9 @@
 (function() {
   'use strict';
 
+  // Footer version comes from manifest.json so it can't drift from the release
+  document.getElementById('appVersion').textContent = `v${chrome.runtime.getManifest().version}`;
+
   // Tab Management (WAI-ARIA tabs pattern, automatic activation)
   const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
   const tabContents = document.querySelectorAll('.tab-content');
